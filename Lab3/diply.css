@@ -1,0 +1,272 @@
+@import url("fonts.css");
+
+body {
+    margin: 0px;
+    max-width: auto;
+}
+
+header {
+    background-color: #0084d5;
+    height: 60px;
+    width: 100%;
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.list-img {
+    margin-left: 7cm;
+    margin-top: 0.5cm;
+    width:33px;
+    height:23px;
+    order:1;
+}
+
+.logo-img {
+    margin-left: 10cm;
+    margin-top: 0.2cm;
+    width: 100px;
+    height:50px;
+    order:2;
+}
+
+.social-apps{
+    order:3;
+    display:inline-flex;
+    flex-direction: row;
+    margin-left:10cm;
+    margin-top:0.5cm;
+}
+
+.twitter{
+    order:1;
+}
+
+.fb {
+    order:2;
+    margin-left: 0.2cm;
+}
+
+.pinterest {
+    order:3;
+    margin-left: 0.2cm;
+}
+.insta {
+    order:4;
+    margin-left: 0.2cm;
+}
+
+.banner {
+    height:600px;
+    width:100%;
+    background-image: url("./res/imgs/good.jpg");
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: inline-block;
+}
+
+.text-on-banner{
+    margin-top: 300px;
+    margin-left: 250px;
+    color: ivory;
+    font-family: Montserrat;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+}
+
+.lifestyle{
+    font-size: 16px;
+    order: 1;
+}
+
+p{
+    font-size: 35px;
+    order:2;
+    margin-top: unset;
+}
+
+.by {
+    font-size: 16px;
+    order:3;
+    
+}
+
+.vertical-boxes{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin:0 auto;
+    margin-top:3%;
+    background-size: contain;
+    justify-content: center;
+}
+
+.v-box1{
+    height:233px;
+    width: 360px;
+    margin-right: 3%;
+    order:1;
+    background-image: url('res/imgs/bombs.webp');
+    
+}
+
+.v-box2{
+    height:233px;
+    width: 360px;
+    margin-right: 3%;
+    order:2;
+    background-image: url('res/imgs/kid.webp');
+}
+
+.v-box3{
+    height:233px;
+    width: 360px;
+    margin-right: 3%;
+    order:3;
+    background-image: url('res/imgs/idea.webp');
+}
+
+.rect{
+    width: 170px;
+    height: 48px;
+    display: block;
+    margin-top: 52%;
+    margin-left:25%;
+    background-size: 138px 37px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.vibes{
+    background-color: #fdd60e;
+    background-image: url('res/imgs/vibes.webp');
+}
+.crafty{  
+    background-color: #f4b4b3;;
+    background-image: url('res/imgs/crafty.webp');
+    
+}
+
+.facts{
+    background-color:#c1002a;
+    background-image: url('res/imgs/facts.webp');
+}
+
+.vertical-writings {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin:0 auto;
+    justify-content: center;
+}
+
+.v-write-initial{
+    height:80px;
+    width: 360px;
+    margin-right: 3%;
+}
+
+.v-write1{
+    order:1;
+    background-color: #f4b4b3;
+}
+
+.v-write2{
+    order:2;
+    background-color: #fdd60e;
+}
+
+.v-write3{
+    order:3;
+    background-color: #c1002a;
+}
+
+.write-text{
+    letter-spacing: 1px;
+    font-weight: 500;
+    font-family: Montserrat;
+    color:white;
+    text-align: center;
+    vertical-align: middle;
+}
+.spring {
+    margin-top:3%;
+    display:flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.title{
+    font-size: 30px;
+    font-weight: 400;
+    font-family: Montserrat;
+    letter-spacing: 1px;
+    color:#414141;
+    text-align: center;
+    order:1;
+}
+
+.article {
+    width: 980;
+    height: 340;
+    display: flex;
+    flex-direction: row;
+    margin:0 auto;
+    margin-top: 3%;
+    border-width: 1px;
+    border-color: #ecebeb;
+    border-style: solid;
+    border-radius: 5px;
+    order:2;
+}
+
+.spring-pic{
+    background-image: url("res/imgs/spring.webp");
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 488px;
+    height: 345px;
+    order:2;
+    margin-left: 3%;
+}
+
+.spring-text{
+    margin-left: 5%;
+    width:488;
+    font-family: Montserrat;
+    color:#999997;
+    order:1;
+    display: flex;
+    flex-direction: column;
+}
+
+.househome{
+    font-size: 14px;
+    margin-top: 6%;
+    order:1;
+}
+
+.description{
+    margin-top: 10%;
+    font-size: 20px;
+    color:black;
+    order:2;
+}
+
+.description-small{
+    font-size: 14px;
+    margin-top: 1%;
+    order:3;
+}
+
+.by2{
+    font-size:14px;
+    margin-top: 10%;
+    order:4;
+}
