@@ -53,7 +53,8 @@ window.onload = ()=>{
             second = "";
       
             if (check()){
-                document.getElementById("win").innerText = "Victory!";
+                document.getElementById("win").innerText = "Well done!";
+                //alert("Well done!");
             }
         }
     };
