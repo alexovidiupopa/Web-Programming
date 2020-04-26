@@ -22,7 +22,6 @@ $(document).ready(function(){
     popupDiv.style.display = 'none';  
     slide();
     } 
-    
     function slide() {
         $("li").animate({"left":"+=15px"}, 'fast', repeat);
     }
