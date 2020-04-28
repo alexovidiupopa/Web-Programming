@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $connection = OpenConnection();
     $id = $_POST['id'];
     echo $id;
-    $query = "DELETE FROM lab7.LogReport WHERE id='$id' AND username='$username'";
+    $query = "DELETE FROM lab7.LogReport WHERE id='$id' AND user_id='$userId'";
 
     $connection->query($query);
 
@@ -50,13 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 <?php
 
 $con = OpenConnection();
-$query = "SELECT * FROM lab7.LogReport WHERE username='$username'";
+$query = "SELECT * FROM lab7.LogReport WHERE user_id='$userId'";
 $result = mysqli_query($con, $query);
 if(mysqli_num_rows($result)>0){
     echo "<table>";
     echo "<tr>";
     echo "<th>ID</th>";
-    echo "<th>Author</th>";
     echo "<th>Message</th>";
     echo "<th>Type</th>";
     echo "<th>Severity</th>";
@@ -65,7 +64,6 @@ if(mysqli_num_rows($result)>0){
     while ($row = mysqli_fetch_array($result)){
         echo "<tr>";
         echo "<th>".$row['id']."</th>";
-        echo "<th>".$row['username']."</th>";
         echo "<th>".$row['message']."</th>";
         echo "<th>".$row['type']."</th>";
         echo "<th>".$row['severity']."</th>";
@@ -74,6 +72,7 @@ if(mysqli_num_rows($result)>0){
     }
     echo "</table>";
 }
+
 CloseConnection($con);
 ?>
 </div>

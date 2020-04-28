@@ -4,11 +4,30 @@
 class LogReport
 {
     public $id;
-    public $author_email;
+    public $user_id;
     public $message;
     public $type;
     public $severity;
     public $posted_on;
+
+    /**
+     * LogReport constructor.
+     * @param $id
+     * @param $user_id
+     * @param $message
+     * @param $type
+     * @param $severity
+     * @param $posted_on
+     */
+    public function __construct($id, $user_id, $message, $type, $severity, $posted_on)
+    {
+        $this->id = $id;
+        $this->user_id = $user_id;
+        $this->message = $message;
+        $this->type = $type;
+        $this->severity = $severity;
+        $this->posted_on = $posted_on;
+    }
 
     /**
      * @return mixed
@@ -19,11 +38,27 @@ class LogReport
     }
 
     /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * @return mixed
      */
-    public function getAuthorEmail()
+    public function getUserId()
     {
-        return $this->author_email;
+        return $this->user_id;
+    }
+
+    /**
+     * @param mixed $user_id
+     */
+    public function setUserId($user_id)
+    {
+        $this->user_id = $user_id;
     }
 
     /**
@@ -35,62 +70,19 @@ class LogReport
     }
 
     /**
-     * @return mixed
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSeverity()
-    {
-        return $this->severity;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPostedOn()
-    {
-        return $this->posted_on;
-    }
-
-    /**
-     * logreport constructor.
-     * @param $id
-     * @param $author_email
-     * @param $message
-     * @param $type
-     * @param $severity
-     * @param $posted_on
-     */
-    public function __construct($id, $author_email, $message, $type, $severity, $posted_on)
-    {
-        $this->id = $id;
-        $this->author_email = $author_email;
-        $this->message = $message;
-        $this->type = $type;
-        $this->severity = $severity;
-        $this->posted_on = $posted_on;
-    }
-
-    /**
-     * @param mixed $author_email
-     */
-    public function setAuthorEmail($author_email)
-    {
-        $this->author_email = $author_email;
-    }
-
-    /**
      * @param mixed $message
      */
     public function setMessage($message)
     {
         $this->message = $message;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
@@ -102,11 +94,27 @@ class LogReport
     }
 
     /**
+     * @return mixed
+     */
+    public function getSeverity()
+    {
+        return $this->severity;
+    }
+
+    /**
      * @param mixed $severity
      */
     public function setSeverity($severity)
     {
         $this->severity = $severity;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostedOn()
+    {
+        return $this->posted_on;
     }
 
     /**

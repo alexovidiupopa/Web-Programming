@@ -2,12 +2,14 @@
 include ('db/connection.php');
 
 $con = OpenConnection();
+
 $sql = "SELECT DISTINCT severity FROM lab7.LogReport";
 $result_set = $con->query($sql);
 $rows = array();
 while ($row = mysqli_fetch_array($result_set, MYSQLI_NUM)) {
     $rows[] = $row[0];
 }
+
 $sql2 = "SELECT DISTINCT type FROM lab7.LogReport";
 $result_set2 = $con->query($sql2);
 $rows2 = array();

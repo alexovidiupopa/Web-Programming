@@ -1,5 +1,5 @@
 <?php
-include ('../db/connection.php');
+include ('./db/connection.php');
 
 $connection = OpenConnection();
 
@@ -16,16 +16,18 @@ if(mysqli_num_rows($result)>0){
     echo "<th>Severity</th>";
     echo "<th>Date Posted</th>";
     echo "</thead>";
+    echo "<tbody>";
     while ($row = mysqli_fetch_array($result)){
         echo "<tr>";
         echo "<th>".$row['id']."</th>";
-        echo "<th>".$row['username']."</th>";
+        echo "<th>".$row['user_id']."</th>";
         echo "<th>".$row['message']."</th>";
         echo "<th>".$row['type']."</th>";
         echo "<th>".$row['severity']."</th>";
         echo "<th>".$row['posted_on']."</th>";
         echo "</tr>";
     }
+    echo "</tbody>";
     echo "</table>";
 
 }

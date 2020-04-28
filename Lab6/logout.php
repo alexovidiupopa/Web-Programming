@@ -9,7 +9,7 @@ session_destroy();
     <title>Logout page</title>
 </head>
 <body>
-<form action = "login.php">
+<form action = "index.html">
     <input type="submit" name="redirect" value = "Go back to home">
 </form>
 </body>

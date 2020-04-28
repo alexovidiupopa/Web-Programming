@@ -7,8 +7,8 @@ if(isset($_POST['submit'])) {
     $password = $_POST['password'];
 
     $con = OpenConnection();
-    $sql = "SELECT id,username,pass FROM lab7.loggers where username = '$username' LIMIT 1";
-    $query = mysqli_query($con, $sql);
+    $sql = "SELECT id,username,password FROM lab7.loggers where username = '$username' LIMIT 1";
+    $query = $con->query($sql);
     if($query) {
         $row = mysqli_fetch_row($query);
         $userId= $row[0];
