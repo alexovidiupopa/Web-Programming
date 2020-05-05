@@ -1,6 +1,7 @@
 package servlets;
 
 import controller.ProfilesController;
+import model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +14,14 @@ import java.io.IOException;
 public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int age = req.getParameter("age").equals("") ? 0 : Integer.parseInt(req.getParameter("age"));
-        req.setAttribute("users", ProfilesController.search(req.getParameter("name"),
-                req.getParameter("email"), age, req.getParameter("hometown")));
+        req.getSession().setAttribute("users",
+                ProfilesController.search(
+                    ((User)req.getSession().getAttribute("user")).getUsername(),
+                    req.getParameter("name"),
+                    req.getParameter("email"),
+                    Integer.parseInt(req.getParameter("age")),
+                    req.getParameter("hometown"))
+        );
         resp.sendRedirect("/browse.jsp");
     }
 }

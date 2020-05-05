@@ -11,9 +11,14 @@
 <html>
 <head>
     <title>Search</title>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-
+<form action="LogoutServlet" method="post">
+    <input type="submit" name="logout" value="Logout">
+</form>
+<h2>Browse</h2>
 <%
     List<User> users = (ArrayList<User>)session.getAttribute("users");
     out.println("<table>");
@@ -25,15 +30,16 @@
     out.println("<th>picture</th>");
     out.println("</thead>");
     out.println("<tbody>");
-    for(User user:users){
-        out.println("<tr>");
-        out.println("<td>" + user.getName() +"</td>");
-        out.println("<td>" + user.getEmail() +"</td>");
-        out.println("<td>" + user.getAge() +"</td>");
-        out.println("<td>" + user.getHometown() +"</td>");
-        out.println("<td>" + user.getPicture() +"</td>");
-        out.println("</tr>");
-    }
+    if (users!=null)
+        for(User user:users){
+            out.println("<tr>");
+            out.println("<td>" + user.getName() +"</td>");
+            out.println("<td>" + user.getEmail() +"</td>");
+            out.println("<td>" + user.getAge() +"</td>");
+            out.println("<td>" + user.getHometown() +"</td>");
+            out.println("<td><img src=\"/imgs/" + user.getPicture() + ".jpg\"></td>");
+            out.println("</tr>");
+        }
     out.println("</tbody>");
     out.println("</table>");
 %>

@@ -15,9 +15,15 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CredentialsManager.register(new User(req.getParameter("username"), req.getParameter("name"),
-                req.getParameter("email"), req.getParameter("picture"), Integer.valueOf(req.getParameter("age")),
-                req.getParameter("hometown")), req.getParameter("password"));
+        CredentialsManager.register(new User(
+                req.getParameter("username"),
+                req.getParameter("name"),
+                req.getParameter("email"),
+                req.getParameter("picture"),
+                Integer.parseInt(req.getParameter("age")),
+                req.getParameter("hometown")),
+                req.getParameter("password"));
+
         resp.sendRedirect("/login.jsp");
     }
 }

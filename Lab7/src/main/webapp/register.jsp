@@ -9,17 +9,20 @@
 <html>
 <head>
     <title>Register</title>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-<form action="RegisterServlet" method="post">
-    Enter username : <input type="text" name="username"> <BR>
-    Enter password : <input type="password" name="password"> <BR>
-    Enter name : <input type="text" name="name"> <BR>
-    Enter email : <input type="text" name="email"> <BR>
-    Enter picture : <input type="text" name="picture"> <BR>
-    Enter age : <input type="text" name="age"> <BR>
-    Enter hometown : <input type="text" name="hometown"> <BR>
-    <input type="submit" value="Register"/>
+<h2>Register</h2>
+<form action="RegisterServlet" method="post" id="registerForm">
+    <input type="text" name="username" placeholder="username" id="username"> <BR>
+    <input type="password" name="password" placeholder="password" id="password"> <BR>
+    <input type="text" name="name" placeholder="name" id="name"> <BR>
+    <input type="text" name="email" placeholder="email" id="email"> <BR>
+    <input type="text" name="picture" placeholder="picture" id="picture"> <BR>
+    <input type="text" name="age" placeholder="age" id="age"> <BR>
+    <input type="text" name="hometown" placeholder="hometown" id="hometown"> <BR>
+    <input type="button" value="Register" onclick="validateRegister()"/>
 </form>
 </body>
 </html>

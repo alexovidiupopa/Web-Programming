@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfilesController {
+
     public static User getUserWithUsername(String username) {
         String sql = "SELECT * FROM profiles WHERE username='" + username + "';";
         try {
@@ -33,19 +34,14 @@ public class ProfilesController {
         }
     }
 
-    public static List<User> search(String name, String email, int age, String hometown){
-        if (hometown.equals(""))
-            hometown = "_";
-        if (email.equals(""))
-            email = "_";
-        if (name.equals(""))
-            name = "_";
-        String sql = "SELECT * FROM profiles WHERE name LIKE '%" + name + "%' OR email LIKE '%" + email + "%' OR AGE=" + age + " OR hometown LIKE '%" + hometown + "%'";
+    public static List<User> search(String username,String name, String email, int age, String hometown){
+        String sql = "SELECT * FROM profiles WHERE username<>'" + username + "'AND (name LIKE '%" + name + "%' OR email LIKE '%" + email + "%' OR AGE=" + age + " OR hometown LIKE '%" + hometown + "%')";
         try {
             PreparedStatement stmt = Manager.getConnection().prepareStatement(sql);
             ResultSet result = stmt.executeQuery();
             List<User> users = new ArrayList<>();
-            if (result.next()){
+
+            while (result.next()){
                 User user = new User();
                 user.setUsername(result.getString("username"));
                 user.setName(result.getString("name"));
@@ -56,9 +52,24 @@ public class ProfilesController {
                 users.add(user);
             }
             return users;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return new ArrayList<>();
+        }
+
+    }
+
+    public static void update(User user) {
+        String sql = "UPDATE profiles SET email='" + user.getEmail() + "', name='" + user.getName() + "', picture='" +
+                user.getPicture() + "', hometown='" + user.getHometown() + "', age=" + user.getAge() + " WHERE username='" +
+                user.getUsername() + "';";
+        try {
+            PreparedStatement stmt = Manager.getConnection().prepareStatement(sql);
+            stmt.execute();
+            Manager.disconnect();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return new ArrayList<>();
     }
 }

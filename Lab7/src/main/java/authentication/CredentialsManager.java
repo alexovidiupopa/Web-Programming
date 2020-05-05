@@ -59,9 +59,10 @@ public class CredentialsManager {
     }
 
     public static void register(User user, String password){
-        String sql = "INSERT INTO profiles(username, password, name, email, picture, age, hometown) VALUES ('" +
-                 user.getUsername() + "', '" + encrypt(password) + "', '" + user.getName() + "', '" + user.getEmail() + "', '" + user.getPicture() + "', " +
-                 + user.getAge() + ", '" + user.getHometown() + "');";
+        String pictureUrl = user.getPicture();
+        String sql = "INSERT INTO profiles(username, password, email, picture, age, hometown, name) VALUES ('" +
+                 user.getUsername() + "', '" + encrypt(password) + "', '" + user.getEmail() + "', '" + pictureUrl + "', " +
+                 + user.getAge() + ", '" + user.getHometown() + "', '" + user.getName() + "');";
         try {
             PreparedStatement stmt = Manager.getConnection().prepareStatement(sql);
             stmt.execute();
