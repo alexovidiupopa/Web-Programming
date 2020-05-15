@@ -1,0 +1,43 @@
+﻿
+@using Lab8.Models;
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewGetStudents</title>
+</head>
+<body>
+    <div>
+        @{
+            List<LogReport> slist = (List<LogReport>)
+                ViewData["reports"];
+        }
+        <table>
+            <tr>
+                <th>id</th>
+                <th>user_id</th>
+                <th>type</th>
+                <th>severity</th>
+                <th>date</th>
+            </tr>
+            @foreach (LogReport report in slist)
+            {
+            <tr>
+                <td>@report.Id</td>
+                <td>@report.User_id</td>
+                <td>@report.Type</td>
+                <td>@report.Severity</td>
+                <td>@report.Date</td>
+            </tr>
+            }
+        </table>
+    </div>
+
+</body>
+</html>
