@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace Lab8.Controllers
@@ -12,27 +13,40 @@ namespace Lab8.Controllers
     {
         public ActionResult Index()
         {
-            return View("GetReports");
+            return View("ViewLogReport");
         }
 
-        public string TestController()
+        public ActionResult GetTypes()
         {
-            return "Testing the MainController .. OK!";
+            DAL dal = new DAL();
+            List<string> typesList = dal.GetAllTypes(Request.Params["username"]);
+            return Json(new { types = typesList }, JsonRequestBehavior.AllowGet);
+         }
+        public ActionResult GetSeverities()
+        {
+            DAL dal = new DAL();
+            List<string> severitiesList = dal.GetAllSeverities(Request.Params["username"]);
+            return Json(new { severities = severitiesList }, JsonRequestBehavior.AllowGet);
         }
-
-
-
         public ActionResult GetReports()
         {
             DAL dal = new DAL();
             List<LogReport> slist = dal.GetLogReports();
-            ViewData["reports"] = slist;
-            return View("ViewGetReports");
+            return Json(new { reports = slist }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetReportsOfUser()
+        {
+            DAL dal = new DAL();
+            System.Diagnostics.Debug.WriteLine(Request.Params["username"]);
+            List<LogReport> slist = dal.GetLogReportsOfUser(Request.Params["username"]);
+            return Json(new { reports = slist }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddStudent()
+        public ActionResult DeleteReport()
         {
-            return View("AddNewStudent");
+            DAL dal = new DAL();
+            bool result = dal.DeleteLogReport(int.Parse(Request.Params["id"]));
+            return Json(new { success=result });
         }
 
         public ActionResult SaveReport()
@@ -47,22 +61,22 @@ namespace Lab8.Controllers
             return RedirectToAction("GetReports");
         }
 
-        public string GetReportsOfType()
+        public ActionResult GetReportsOfType()
         {
             string type =(Request.Params["type"]);
+            string user = Request.Params["user"];
             DAL dal = new DAL();
-            List<LogReport> slist = dal.GetReportsOfType(type);
-            ViewData["reports"] = slist;
+            List<LogReport> slist = dal.GetReportsOfType(type,user);
+            return Json(new { reports = slist }, JsonRequestBehavior.AllowGet);
+        }
 
-            string result = "<table><thead><th>Id</th><th>User_id</th><th>Type</th><th>Severity</th></thead>";
-
-            foreach (LogReport stud in slist)
-            {
-                result += "<tr><td>" + stud.Id + "</td><td>" + stud.User_id + "</td><td>" + stud.Type + "</td><td>" + stud.Severity + "</td><td></tr>";
-            }
-
-            result += "</table>";
-            return result;
+        public ActionResult GetReportsOfSeverity()
+        {
+            string severity = (Request.Params["severity"]);
+            string user = Request.Params["user"];
+            DAL dal = new DAL();
+            List<LogReport> slist = dal.GetReportsOfSeverity(severity, user);
+            return Json(new { reports = slist }, JsonRequestBehavior.AllowGet);
         }
     }
 }

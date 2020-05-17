@@ -9,14 +9,174 @@ namespace Lab8.Data_Abstraction_Layer
 {
     public class DAL
     {
-
+        
         public MySqlConnection getConnection()
         {
             string myConnectionString;
-            myConnectionString = "server=127.0.0.1;uid=alex;pwd=alex;database=logreports;";
+            myConnectionString = "server=localhost;uid=root;pwd=;database=logreports;";
             return new MySqlConnection(myConnectionString);
         
-        } 
+        }
+
+        public bool login(string user, string password)
+        {
+
+            List<String> users = new List<String>();
+
+            try
+            {
+                MySqlConnection conn = getConnection();
+                conn.Open();
+
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "select * from users where username='" + user + "'and password='" + password + "'";
+                MySqlDataReader myreader = cmd.ExecuteReader();
+
+                while (myreader.Read())
+                {
+                    users.Add(myreader.GetString("username"));
+                }
+                myreader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Console.Write(ex.Message);
+                return false;
+            }
+            return users.Count == 1;
+
+        }
+
+        internal List<LogReport> GetReportsOnPage(int pageNo, int pageSize, int totalSize)
+        {
+            int offset = pageNo * pageSize;
+            int totalPages = (int) Math.Ceiling((double) totalSize / pageSize);
+            List<LogReport> reports = new List<LogReport>();
+            try
+            {
+                MySqlConnection conn = getConnection();
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText = "select * from reports limit " + offset + ", " + pageSize + ";";
+                MySqlDataReader myreader = cmd.ExecuteReader();
+
+                while (myreader.Read())
+                {
+                    LogReport report = new LogReport();
+                    report.Id = myreader.GetInt32("id");
+                    report.User_id = myreader.GetInt32("user_id");
+                    report.Type = myreader.GetString("type");
+                    report.Severity = myreader.GetString("severity");
+                    report.Date = myreader.GetString("date_posted");
+                    reports.Add(report);
+                }
+                myreader.Close();
+
+                conn.Close();
+            }
+            catch(MySqlException e)
+            {
+
+            }
+            return reports;
+        }
+
+        internal List<string> GetAllSeverities(string user)
+        {
+            List<string> severities = new List<string>();
+            try
+            {
+                MySqlConnection conn = getConnection();
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "select distinct r.severity from reports r inner join users u on r.user_id=u.id where u.username='" + user + "'";
+                MySqlDataReader myreader = cmd.ExecuteReader();
+
+                while (myreader.Read())
+                {
+                    severities.Add(myreader.GetString("severity"));
+                    System.Diagnostics.Debug.WriteLine(myreader.GetString("severity"));
+                }
+                myreader.Close();
+                conn.Close();
+            }
+            catch (MySqlException e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return severities;
+        }
+
+        public List<string> GetAllTypes(string user)
+        {
+            List<string> types = new List<string>();
+            try
+            {
+                MySqlConnection conn = getConnection();
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "select distinct r.type from reports r inner join users u on r.user_id=u.id where u.username='" + user + "'";
+                MySqlDataReader myreader = cmd.ExecuteReader();
+
+                while (myreader.Read())
+                {
+                    types.Add(myreader.GetString("type"));
+                    System.Diagnostics.Debug.WriteLine(myreader.GetString("type"));
+                }
+                myreader.Close();
+                conn.Close();
+            }
+            catch(MySqlException e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return types;
+        }
+
+        internal List<LogReport> GetLogReportsOfUser(string user)
+        {
+            List<LogReport> slist = new List<LogReport>();
+            try
+            {
+                MySqlConnection conn = getConnection();
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+                
+                cmd.CommandText = "select r.id, r.user_id, r.type, r.severity, r.date_posted from reports r inner join users u on u.id=r.user_id where u.username='" + user + "'";
+                MySqlDataReader myreader = cmd.ExecuteReader();
+
+                while (myreader.Read())
+                {
+                    LogReport report = new LogReport();
+                    report.Id = myreader.GetInt32("id");
+                    report.User_id = myreader.GetInt32("user_id");
+                    report.Type = myreader.GetString("type");
+                    report.Severity = myreader.GetString("severity");
+                    report.Date = myreader.GetString("date_posted");
+                    slist.Add(report);
+                }
+                myreader.Close();
+                
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                
+                Console.Write(ex.Message);
+            }
+            return slist;
+        }
 
         public List<LogReport> GetLogReports()
         {         
@@ -28,7 +188,7 @@ namespace Lab8.Data_Abstraction_Layer
 
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "select * from LogReport" ;
+                cmd.CommandText = "select * from reports" ;
                 MySqlDataReader myreader = cmd.ExecuteReader();
 
                 while (myreader.Read())
@@ -38,15 +198,16 @@ namespace Lab8.Data_Abstraction_Layer
                     report.User_id = myreader.GetInt32("user_id");
                     report.Type = myreader.GetString("type");
                     report.Severity = myreader.GetString("severity");
-                    report.Date = myreader.GetString("date");
+                    report.Date = myreader.GetString("date_posted");
                     slist.Add(report);
                 }
                 myreader.Close();
-
+           
                 conn.Close();
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine("here");
                 Console.Write(ex.Message);
             }
             return slist;
@@ -58,22 +219,23 @@ namespace Lab8.Data_Abstraction_Layer
             MySqlConnection conn = getConnection();
             conn.Open();
             cmd.Connection = conn;
-            cmd.CommandText = "INSERT INTO LogReport(user_id, type, severity, date) VALUES (" +
+            cmd.CommandText = "INSERT INTO reports(user_id, type, severity, date_posted) VALUES (" +
                 log.User_id + ", '" + log.Type + "', '" + log.Severity + "', '" + log.Date + "');";  
             cmd.ExecuteNonQuery();
         }
 
-        public void DeleteLogReport(int id)
+        public bool DeleteLogReport(int id)
         {
             MySqlCommand cmd = new MySqlCommand();
             MySqlConnection conn = getConnection();
             conn.Open();
             cmd.Connection = conn;
-            cmd.CommandText = "DELETE FROM LogReport WHERE id=" + id;
-            cmd.ExecuteNonQuery();
+            cmd.CommandText = "DELETE FROM reports WHERE id=" + id;
+            int cnt = cmd.ExecuteNonQuery();
+            return cnt == 1;
         }
 
-        public List<LogReport> GetReportsOfType(string type)
+        public List<LogReport> GetReportsOfType(string type, string user)
         {
             List<LogReport> slist = new List<LogReport>();
             try
@@ -83,7 +245,7 @@ namespace Lab8.Data_Abstraction_Layer
 
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "select * from LogReport where type='" + type + "'";
+                cmd.CommandText = "select r.id, r.user_id, r.type, r.severity, r.date_posted from reports r inner join users u on u.id=r.user_id where type='" + type + "' and u.username='" + user + "'";
                 MySqlDataReader myreader = cmd.ExecuteReader();
 
                 while (myreader.Read())
@@ -93,7 +255,7 @@ namespace Lab8.Data_Abstraction_Layer
                     report.User_id = myreader.GetInt32("user_id");
                     report.Type = myreader.GetString("type");
                     report.Severity = myreader.GetString("severity");
-                    report.Date = myreader.GetString("date");
+                    report.Date = myreader.GetString("date_posted");
                     slist.Add(report);
                 }
                 myreader.Close();
@@ -102,12 +264,12 @@ namespace Lab8.Data_Abstraction_Layer
             }
             catch (MySqlException ex)
             {
-                Console.Write(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
             return slist;
         }
 
-        public List<LogReport> GetReportsOfSeverity(string severity)
+        public List<LogReport> GetReportsOfSeverity(string severity, string user)
         {
             List<LogReport> slist = new List<LogReport>();
             try
@@ -117,7 +279,7 @@ namespace Lab8.Data_Abstraction_Layer
 
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "select * from LogReport where severity='" + severity + "'";
+                cmd.CommandText = "select r.id, r.user_id, r.type, r.severity, r.date_posted from reports r inner join users u on u.id=r.user_id where severity='" + severity + "' and u.username='" + user + "'";
                 MySqlDataReader myreader = cmd.ExecuteReader();
 
                 while (myreader.Read())
@@ -127,7 +289,7 @@ namespace Lab8.Data_Abstraction_Layer
                     report.User_id = myreader.GetInt32("user_id");
                     report.Type = myreader.GetString("type");
                     report.Severity = myreader.GetString("severity");
-                    report.Date = myreader.GetString("date");
+                    report.Date = myreader.GetString("date_posted");
                     slist.Add(report);
                 }
                 myreader.Close();
