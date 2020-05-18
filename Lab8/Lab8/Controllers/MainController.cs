@@ -51,14 +51,15 @@ namespace Lab8.Controllers
 
         public ActionResult SaveReport()
         {
+            DAL dal = new DAL();
             LogReport log = new LogReport();
-            log.User_id = int.Parse(Request.Params["user_id"]);
+            log.User_id = dal.GetUserIdOfUser(Request.Params["username"]);
             log.Date = Request.Params["date"];
             log.Severity = Request.Params["severity"];
             log.Type = Request.Params["type"];
-            DAL dal = new DAL();
-            dal.AddLogReport(log);
-            return RedirectToAction("GetReports");
+            
+            bool result = dal.AddLogReport(log);
+            return Json(new { success = result });
         }
 
         public ActionResult GetReportsOfType()

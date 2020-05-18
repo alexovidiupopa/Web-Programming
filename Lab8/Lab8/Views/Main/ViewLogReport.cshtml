@@ -7,19 +7,39 @@
 
 <head>
     <title>ViewLogReport</title>
+    <style>
+        body {
+            margin: 0 auto;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        table {
+            margin: 0 auto;
+        }
+        td {            
+            border:1px solid black;
+        }
+
+    </style>
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script language="javascript">
         function printAllReports(reports) {
-            var content = "<table><tr><th>Id</th><th>User id</th><th>Type</th><th>Severity</th><th>Date posted</th><th>Bttn</th></tr>";
+            var content = "<table><tr><th></th><th>Id</th><th>User id</th><th>Type</th><th>Severity</th><th>Date posted</th></tr>";
             for (var rep of reports) {
                 console.log(rep);
                 let deleteName = "delete-report-" + rep.Id + "-btn";
-                content += "<tr><td>" + rep.Id + "</td>" +
+                content += "<tr>" + "<td><button type=\"button\" id=\"" + deleteName + "\">Delete</button></td>" +
+                    "<td>" + rep.Id + "</td>" +
                     "<td>" + rep.User_id + "</td>" +
                     "<td>" + rep.Type + "</td>" +
                     "<td>" + rep.Severity + "</td>" +
                     "<td>" + rep.Date + "</td>" +
-                    "<td><button type=\"button\" id=\"" + deleteName + "\">Delete</button></td>" +
+                    
                     "</tr>";
             }
 
@@ -53,7 +73,7 @@
         }
 
         function printAllTypes(types, uname) {
-            var content = "";
+            var content = "<option value=none>...</option>";
             for (var rep of types) {
                 content += "<option value=" + rep + ">" + rep + "</option>";
             }
@@ -92,7 +112,7 @@
         }
 
         function printAllSeverities(severities, uname) {
-            var content = "";
+            var content = "<option value=none>...</option>";
             for (var rep of severities) {
                 content += "<option value=" + rep + ">" + rep + "</option>";
             }
@@ -131,15 +151,17 @@
         }
 
         $(document).ready(function () {
-            if (sessionStorage["currentUser"] !== null) {
-                
+            if (JSON.parse(sessionStorage["currentUser"]) !== null) {
+
                 Array.prototype.pushArray = function (arr) {
                     this.push.apply(this, arr);
                 };
+
                 let crtUser = sessionStorage["currentUser"];
                 console.log(crtUser);
                 let uname = JSON.parse(crtUser).username;
-                $("#user").html("Welcome " + uname);
+                $("#user").html("Welcome <b>" + uname + "</b>");
+
                 var reports = [];
                 $(function () {
                     $.getJSON(
@@ -150,6 +172,7 @@
                         }
                     )
                 });
+
                 var types = [];
                 $(function () {
                     $.getJSON(
@@ -160,6 +183,7 @@
                         }
                     )
                 });
+
                 var severities = [];
                 $(function () {
                     $.getJSON(
@@ -170,6 +194,36 @@
                         }
                     )
                 });
+
+                $("#add-btn").click(function () {
+                    var type = $("#type-input").val();
+                    var severity = $("#severity-input").val();
+                    if (type === "" || severity === "") {
+                        alert("Incorrect inputs- please don't leave them empty");
+                        return;
+                    }
+                    var re = /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/g;
+                    var date = $("#date-input").val();
+                    if (!re.test(date)) {
+                        alert("Please select a valid date");
+                        return;
+                    }
+                    $.post("Main/SaveReport",
+                        { username: uname, type: type, severity: severity, date: date },
+                        function (data, status) {
+                            if (data["success"] === true) {
+                                location.reload();
+                            }
+                            else {
+                                alert("Insert operation failed..");
+                            }
+                        }
+                    )
+                });
+
+            }
+            else {
+                location.href = 'Login';
             }
         });
     </script>
@@ -178,17 +232,24 @@
 <body>
     <a href="/Menu">Home</a>
     <p id="user" style="text-align:center"></p>
-    <div style="display:flex; align-items:center; justify-content:center; ">
+    <div class="main-div">
         <section id="reports"></section>
         <p>Filter by type</p>
-        <div style="display:block">
-            <select id="types" style="order:1"></select>
-            <section id="types-list" style="order:2"></section>
+        <div>
+            <select id="types"></select>
+            <section id="types-list"></section>
         </div>
             <p>Filter by severity</p>
         <select id="severity"></select>
         <section id="severity-list"></section>
     </div>
+    <p>Add a log report</p>
+    <form>
+        <input type="text" placeholder="type" id="type-input" />
+        <input type="text" placeholder="severity" id="severity-input" />
+        <input type="date" placeholder="date"  id="date-input"/>
+        <button type="button" id="add-btn">Add</button>
+    </form>
 </body>
 
 

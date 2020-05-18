@@ -86,6 +86,36 @@ namespace Lab8.Data_Abstraction_Layer
             return reports;
         }
 
+        public int GetUserIdOfUser(string user)
+        {
+            int report = 0;
+            try
+            {
+                MySqlConnection conn = getConnection();
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText = "select id from users where username='" + user + "'";
+                MySqlDataReader myreader = cmd.ExecuteReader();
+
+                while (myreader.Read())
+                {
+                    report = myreader.GetInt32("id");
+                }
+
+                myreader.Close();
+
+                conn.Close();
+            }
+            catch (MySqlException e)
+            {
+
+            }
+            return report;
+        }
+
         internal List<string> GetAllSeverities(string user)
         {
             List<string> severities = new List<string>();
@@ -213,7 +243,7 @@ namespace Lab8.Data_Abstraction_Layer
             return slist;
         }
 
-        public void AddLogReport(LogReport log)
+        public bool AddLogReport(LogReport log)
         {
             MySqlCommand cmd = new MySqlCommand();
             MySqlConnection conn = getConnection();
@@ -221,7 +251,9 @@ namespace Lab8.Data_Abstraction_Layer
             cmd.Connection = conn;
             cmd.CommandText = "INSERT INTO reports(user_id, type, severity, date_posted) VALUES (" +
                 log.User_id + ", '" + log.Type + "', '" + log.Severity + "', '" + log.Date + "');";  
-            cmd.ExecuteNonQuery();
+            int cnt = cmd.ExecuteNonQuery();
+            conn.Close();
+            return cnt==1;
         }
 
         public bool DeleteLogReport(int id)
@@ -232,6 +264,7 @@ namespace Lab8.Data_Abstraction_Layer
             cmd.Connection = conn;
             cmd.CommandText = "DELETE FROM reports WHERE id=" + id;
             int cnt = cmd.ExecuteNonQuery();
+            conn.Close();
             return cnt == 1;
         }
 
