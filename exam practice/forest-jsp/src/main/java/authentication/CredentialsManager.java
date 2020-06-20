@@ -5,16 +5,16 @@ import db.Manager;
 import java.sql.*;
 
 public class CredentialsManager {
-    public static String authenticate(String username, String password) {
+    public static int authenticate(String username, String password) {
         ResultSet rs;
-        String result = "error";
+        int result = -1;
         Manager.connect();
         Connection con = Manager.getConnection();
         try {
             Statement stmt = con.createStatement();
-            rs = stmt.executeQuery("select * from users where username='"+username+"' and password='"+ password +"'");
+            rs = stmt.executeQuery("select id from users where username='"+username+"' and password='"+ password +"'");
             if (rs.next()) {
-                result = "success";
+                result = rs.getInt("id");
             }
             rs.close();
             Manager.disconnect();

@@ -1,19 +1,23 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Asset {
+public class Asset implements Serializable {
     private int id;
-    private int user_id;
+    private int userId;
     private String name;
     private String description;
     private int value;
+
+    public Asset() {
+    }
 
     @Override
     public String toString() {
         return "Asset{" +
                 "id=" + id +
-                ", user_id=" + user_id +
+                ", user_id=" + userId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", value=" + value +
@@ -26,7 +30,7 @@ public class Asset {
         if (o == null || getClass() != o.getClass()) return false;
         Asset asset = (Asset) o;
         return id == asset.id &&
-                user_id == asset.user_id &&
+                userId == asset.userId &&
                 value == asset.value &&
                 Objects.equals(name, asset.name) &&
                 Objects.equals(description, asset.description);
@@ -34,7 +38,7 @@ public class Asset {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user_id, name, description, value);
+        return Objects.hash(id, userId, name, description, value);
     }
 
     public int getId() {
@@ -45,12 +49,12 @@ public class Asset {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
     public void setUser_id(int user_id) {
-        this.user_id = user_id;
+        this.userId = user_id;
     }
 
     public String getName() {
@@ -79,7 +83,7 @@ public class Asset {
 
     public Asset(int id, int user_id, String name, String description, int value) {
         this.id = id;
-        this.user_id = user_id;
+        this.userId = user_id;
         this.name = name;
         this.description = description;
         this.value = value;
