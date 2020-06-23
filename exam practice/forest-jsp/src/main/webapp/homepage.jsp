@@ -1,6 +1,7 @@
 <%@ page import="model.Asset" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="controller.AppController" %><%--
   Created by IntelliJ IDEA.
   User: Alex
   Date: 18.06.2020
@@ -43,7 +44,7 @@
                         "/asset", {action: "getAssets", userId: id}, function (data, status) {
                             console.log(data);
                             assets.pushArray(data["assets"]);
-                            showAssets(assets);
+                            //showAssets(assets);
                         }
                     )
                 });
@@ -96,6 +97,25 @@
 </form>
 
 <section id="all-assets">
+    <%
+        int userId = (int) session.getAttribute("userId");
+        List<Asset> assets = AppController.getAssetsOfUser(userId);
+
+        String content = "<table border='1'><tr><th>Id</th><th>Name</th><th>Description</th><th>Value</th></tr>";
+        for (Asset asset: assets){
+            String color = "";
+            if (asset.getValue() > 10) {
+                color = "style=\"background-color:#FF0000\"";
+            }
+            content += "<tr " + color + "><td>" + asset.getId() + "</td>" +
+                    "<td>" + asset.getName() + "</td>" +
+                    "<td>" + asset.getDescription() + "</td>" +
+                    "<td>" + asset.getValue() + "</td>" +
+                    "</tr>";
+        }
+        content += "</table>";
+        out.println(content);
+    %>
 </section>
 <section id="assets-array">
 </section>

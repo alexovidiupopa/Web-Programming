@@ -18,9 +18,8 @@ namespace forest_asp.Controllers
         public ActionResult Login()
         {
             string user = Request.Params["user"];
-            string pwd = Request.Params["password"];
             DAL dal = new DAL();
-            bool result = dal.login(user, pwd);
+            bool result = dal.login(user);
             int uid = dal.GetUserIdOfUser(user);
             return Json(new { success = result, userId = uid });
         }

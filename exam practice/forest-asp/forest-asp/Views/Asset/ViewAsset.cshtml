@@ -11,16 +11,13 @@
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script language="javascript">
         function showAssets(assets) {
-            var content = "<table border='1'><tr><th>Id</th><th>Name</th><th>Description</th><th>Value</th></tr>";
+            var content = "<table border='1'><tr><th>Id</th><th>CourseName</th><th>Participants</th><th>Grades</th></tr>";
             for (var asset of assets) {
                 let color = "";
-                if (asset.Value > 10) {
-                    color = "style=\"background-color:#FF0000\"";
-                }
                 content += "<tr " + color + "><td>" + asset.Id + "</td>" +
-                    "<td>" + asset.Name + "</td>" +
-                    "<td>" + asset.Description + "</td>" +
-                    "<td>" + asset.Value + "</td>" +
+                    "<td>" + asset.CourseName + "</td>" +
+                    "<td>" + asset.Participants + "</td>" +
+                    "<td>" + asset.Grades + "</td>" +
                     "</tr>";
             }
             console.log(content);
@@ -32,18 +29,21 @@
                 Array.prototype.pushArray = function (arr) {
                     this.push.apply(this, arr);
                 };
+
                 let id = JSON.parse(sessionStorage["currentUser"])["userId"];
                 var assets = [];
                 var newAssets = [];
+
                 $(function () {
                     $.getJSON(
-                        "/Asset/GetAssetsOfUser", { userId: id }, function (data, status) {
+                        "/Api/GetCoursesOfUser", { userId: id }, function (data, status) {
                             console.log(data);
-                            assets.pushArray(data["assets"]);
+                            assets.pushArray(data["courses"]);
                             showAssets(assets);
                         }
                     )
                 });
+
                 $("#send-button").click(function () {
                     $.post(
                         "/Asset/AddAssets",
@@ -55,6 +55,7 @@
                     newAssets = [];
                     $("#assets-array").val("");
                 });
+
                 $("#push-button").click(function () {
                     newAssets.push({ userId: id, name: $("#name").val(), description: $("#description").val(), value: $("#value").val() });
                     $("#name").val("");

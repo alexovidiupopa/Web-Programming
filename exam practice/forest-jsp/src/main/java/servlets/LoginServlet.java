@@ -29,6 +29,7 @@ public class LoginServlet extends HttpServlet {
             if(userId != -1){
                 answer.put("success", true);
                 answer.put("userId", userId);
+                request.getSession().setAttribute("userId", userId);
             } else{
                 answer.put("success", false);
             }

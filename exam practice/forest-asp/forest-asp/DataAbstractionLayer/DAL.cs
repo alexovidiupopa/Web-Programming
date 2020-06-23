@@ -13,12 +13,12 @@ namespace forest_asp.DataAbstractionLayer
         public MySqlConnection getConnection()
         {
             string myConnectionString;
-            myConnectionString = "server=localhost;uid=alex;pwd=alex;database=examforest;";
+            myConnectionString = "server=localhost;uid=alex;pwd=alex;database=exam;";
             return new MySqlConnection(myConnectionString);
 
         }
 
-        public bool login(string user, string password)
+        public bool login(string user)
         {
 
             List<String> users = new List<String>();
@@ -31,12 +31,12 @@ namespace forest_asp.DataAbstractionLayer
 
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "select * from users where username='" + user + "'and password='" + password + "'";
+                cmd.CommandText = "select * from persons where name='" + user + "'";
                 MySqlDataReader myreader = cmd.ExecuteReader();
 
                 while (myreader.Read())
                 {
-                    users.Add(myreader.GetString("username"));
+                    users.Add(myreader.GetString("name"));
                 }
 
                 conn.Close();
@@ -50,6 +50,78 @@ namespace forest_asp.DataAbstractionLayer
             return users.Count == 1;
 
         }
+
+        internal bool GradeStudent(int courseId, string studentName, int grade)
+        {
+            MySqlConnection connection;
+            int rowsAffected = 0;
+            try
+            {
+                connection = getConnection();
+                connection.Open();
+                string participants=getParticipantsOfCourse(courseId);
+                string grades = getGradesOfCourse(courseId);
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = connection;
+                cmd.CommandText = "UPDATE courses SET participants='" + participants+"," + studentName + "', grades='" + grades + "," + grade + "' where id=" + courseId; 
+                rowsAffected = cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.Write(ex.Message);
+                return false;
+
+            }
+            return rowsAffected == 1;
+        }
+
+        private string getGradesOfCourse(int courseId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string getParticipantsOfCourse(int courseId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Course> getCoursesOfStudent(string name)
+        {
+            List<Course> lst = new List<Course>();
+            try
+            {
+                MySqlConnection conn = getConnection();
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText = "select id,coursename,participants, grades from courses where participants LIKE '%" + name + "%'";
+                MySqlDataReader myreader = cmd.ExecuteReader();
+
+                while (myreader.Read())
+                {
+                    Course course = new Course();
+                    course.Id = myreader.GetInt32("id");          
+                    course.CourseName = myreader.GetString("coursename");
+                    course.Participants = myreader.GetString("participants");
+                    course.Grades = myreader.GetString("grades");
+                    lst.Add(course);
+                }
+
+                myreader.Close();
+
+                conn.Close();
+            }
+            catch (MySqlException e)
+            {
+
+            }
+            return lst;
+        }
+    
+
         public bool SaveAsset(Asset asset)
         {
             MySqlConnection connection;
@@ -84,7 +156,7 @@ namespace forest_asp.DataAbstractionLayer
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = conn;
 
-                cmd.CommandText = "select id from users where username='" + user + "'";
+                cmd.CommandText = "select id from persons where name='" + user + "'";
                 MySqlDataReader myreader = cmd.ExecuteReader();
 
                 while (myreader.Read())
@@ -126,6 +198,42 @@ namespace forest_asp.DataAbstractionLayer
                     asset.Description = myreader.GetString("description");
                     asset.Value = myreader.GetInt32("value");
                     lst.Add(asset);
+                }
+
+                myreader.Close();
+
+                conn.Close();
+            }
+            catch (MySqlException e)
+            {
+
+            }
+            return lst;
+        }
+
+        public List<Course> getCoursesOfUser(int userId)
+        {
+            List<Course> lst = new List<Course>();
+            try
+            {
+                MySqlConnection conn = getConnection();
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText = "select id,coursename,participants, grades from courses where professorid=" + userId;
+                MySqlDataReader myreader = cmd.ExecuteReader();
+
+                while (myreader.Read())
+                {
+                    Course course = new Course();
+                    course.Id = myreader.GetInt32("id");
+                    course.ProfessorId = userId;
+                    course.CourseName = myreader.GetString("coursename");
+                    course.Participants = myreader.GetString("participants");
+                    course.Grades = myreader.GetString("grades");
+                    lst.Add(course);
                 }
 
                 myreader.Close();

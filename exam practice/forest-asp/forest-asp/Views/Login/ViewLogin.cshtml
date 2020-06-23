@@ -24,12 +24,12 @@
         $(document).ready(function () {
             sessionStorage.setItem("currentUser", null);
             $("#login-button").click(function () {
-                if ($('#user').val().length && $('#password').val().length ) {
+                if ($('#user').val().length ) {
                     $.post(
                         "/Login/Login",
                         {
                             user: $('#user').val(),
-                            password: $('#password').val()
+                          
                         },
                         function (data, success) {
                             console.log(data);
@@ -37,7 +37,7 @@
                                 var temp = { userId: data["userId"] };
                                 sessionStorage.setItem("currentUser", JSON.stringify( temp ));
                                 console.log(JSON.parse(sessionStorage["currentUser"]));
-                                location.href = 'Asset';
+                                location.href = 'Api';
                             } else {
                                 $("#error").html("<h4 style=\"color: red;\">Bad credentials!</h4>");
                             }
@@ -52,12 +52,10 @@
 </head>
 <body>
     <div class="containter">
-        <h3>Login</h3>
+        <h3>Login professor</h3>
         <form>
             <label for="user">Username:</label>
             <input type="text" id="user" name="user"><br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password"><br><br>
             <button type="button" id="login-button">Login</button>
         </form>
         <section id="error">
